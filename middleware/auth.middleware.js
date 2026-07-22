@@ -2,13 +2,19 @@ import express from "express"
 import  jwt  from "jsonwebtoken";
 
 export const logger = (req, res, next)=>{
-    const auth = req.headers.authorization
-    const token = auth.split(" ")[1];
-    const decode = jwt.verify(token, "secret")  
-    console.log(decode)
-    req.user = decode
+    try {
+        const auth = req.headers.authorization
+        const token = auth.split(" ")[1];
+        const decode = jwt.verify(token, "secret")  
+        console.log(decode)
+        req.user = decode
 
     next();
+    } catch (err) {
+        res.json({
+            "error":err
+        })
+    }
 }
 
 export const adminLogic = (req, res, next)=>{
